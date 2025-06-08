@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Window Quote Estimator</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <form id="quote-form">
+    <div class="step" id="step-1">
+      <h2>Select Window Type</h2>
+      <select id="window-type" required>
+        <option value="" disabled selected>Select type</option>
+        <option value="casement">Casement</option>
+        <option value="sliding">Sliding</option>
+        <option value="fixed">Fixed</option>
+      </select>
+      <button type="button" class="next">Next</button>
+    </div>
+
+    <div class="step" id="step-2">
+      <h2>Enter Dimensions (mm)</h2>
+      <label>Width: <input type="number" id="width" required></label>
+      <label>Height: <input type="number" id="height" required></label>
+      <div id="drawing"></div>
+      <button type="button" class="prev">Back</button>
+      <button type="button" class="next">Next</button>
+    </div>
+
+    <div class="step" id="step-3">
+      <h2>Select Frame Material</h2>
+      <label><input type="radio" name="frame" value="aluminum" required> Aluminum</label>
+      <label><input type="radio" name="frame" value="wood"> Wood</label>
+      <label><input type="radio" name="frame" value="pvc"> PVC</label>
+      <button type="button" class="prev">Back</button>
+      <button type="button" class="next">Next</button>
+    </div>
+
+    <div class="step" id="step-4">
+      <h2>Glazing Options</h2>
+      <label><input type="checkbox" name="glazing" value="double"> Double Glazing</label>
+      <label><input type="checkbox" name="glazing" value="tinted"> Tinted</label>
+      <label><input type="checkbox" name="glazing" value="low-e"> Low-E Coating</label>
+      <button type="button" class="prev">Back</button>
+      <button type="button" class="next">Next</button>
+    </div>
+
+    <div class="step" id="step-5">
+      <h2>Your Quote</h2>
+      <div id="quote-summary"></div>
+      <input type="hidden" name="quote_details" id="quote-details">
+      <button type="button" class="prev">Back</button>
+      <button type="submit">Submit</button>
+    </div>
+  </form>
+  <script src="script.js"></script>
+</body>
+</html>
