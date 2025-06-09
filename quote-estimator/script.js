@@ -61,33 +61,38 @@ $(document).ready(function(){
   function drawWindow(){
     var width = parseFloat($('#width').val()) || 0;
     var height = parseFloat($('#height').val()) || 0;
+    var type = $('#window-type').val();
     if(!width || !height){
       $('#drawing').empty();
       return;
     }
-    var margin = 60;
+    var margin = 80;
+    var glassW = width - 16;
+    var glassH = height - 16;
     var svg = `
       <svg viewBox="0 0 ${width + margin} ${height + margin}" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="rgba(255,255,255,0.5)" />
-            <stop offset="100%" stop-color="rgba(0,150,255,0.25)" />
-          </linearGradient>
-          <linearGradient id="frameGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#ccc" />
-            <stop offset="100%" stop-color="#666" />
+            <stop offset="0%" stop-color="#b0e0ff" />
+            <stop offset="100%" stop-color="#e6f7ff" />
           </linearGradient>
           <marker id="arrow" markerWidth="10" markerHeight="10" refX="0" refY="3" orient="auto">
             <path d="M0,0 L0,6 L9,3 z" fill="#555" />
           </marker>
         </defs>
-        <g transform="translate(30,30)">
-          <rect x="0" y="0" width="${width}" height="${height}" fill="url(#glassGrad)" stroke="url(#frameGrad)" stroke-width="20" />
+        <g transform="translate(40,40)">
+          <rect x="0" y="0" width="${width}" height="${height}" fill="none" stroke="#000" stroke-width="4" />
+          <rect x="4" y="4" width="${width - 8}" height="${height - 8}" fill="none" stroke="#fff" stroke-width="4" />
+          <rect x="8" y="8" width="${glassW}" height="${glassH}" fill="url(#glassGrad)" stroke="#000" stroke-width="4" />
+          ${type === 'awning' ? `<line x1="8" y1="8" x2="${glassW/2 + 8}" y2="${glassH + 8}" stroke="#000" stroke-width="2" />
+          <line x1="${glassW + 8}" y1="8" x2="${glassW/2 + 8}" y2="${glassH + 8}" stroke="#000" stroke-width="2" />` : ''}
+          ${type === 'sliding' ? `<line x1="${glassW/2 + 8}" y1="8" x2="${glassW/2 + 8}" y2="${glassH + 8}" stroke="#000" stroke-width="4" />
+          <line x1="${glassW + 6}" y1="${glassH/2 + 8}" x2="${glassW/2 + 12}" y2="${glassH/2 + 8}" stroke="#000" stroke-width="2" marker-end="url(#arrow)" />` : ''}
         </g>
-        <line x1="30" y1="${height + 40}" x2="${width + 30}" y2="${height + 40}" stroke="#555" marker-start="url(#arrow)" marker-end="url(#arrow)" />
-        <text x="${width / 2 + 30}" y="${height + 55}" text-anchor="middle" font-size="14" fill="#555">W ${width}mm</text>
-        <line x1="20" y1="30" x2="20" y2="${height + 30}" stroke="#555" marker-start="url(#arrow)" marker-end="url(#arrow)" />
-        <text x="15" y="${height / 2 + 30}" text-anchor="middle" font-size="14" fill="#555" transform="rotate(-90 15,${height / 2 + 30})">H ${height}mm</text>
+        <line x1="40" y1="${height + 60}" x2="${width + 40}" y2="${height + 60}" stroke="#555" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+        <text x="${width / 2 + 40}" y="${height + 75}" text-anchor="middle" font-size="14" fill="#555">W ${width}mm</text>
+        <line x1="30" y1="40" x2="30" y2="${height + 40}" stroke="#555" marker-start="url(#arrow)" marker-end="url(#arrow)" />
+        <text x="25" y="${height / 2 + 40}" text-anchor="middle" font-size="14" fill="#555" transform="rotate(-90 25,${height / 2 + 40})">H ${height}mm</text>
       </svg>
     `;
 
