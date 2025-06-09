@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
   var currentStep = 1;
   showStep(currentStep);
@@ -5,13 +6,15 @@ $(document).ready(function(){
   function showStep(step){
     $('.step').removeClass('active');
     $('#step-' + step).addClass('active');
+    $('#progressbar li').removeClass('active');
+    $('#progressbar li').slice(0, step).addClass('active');
   }
 
   $('.next').on('click', function(){
     if(validateStep(currentStep)){
       currentStep++;
       showStep(currentStep);
-      if(currentStep === 2){
+      if(currentStep === 2 || currentStep === 5){
         drawWindow();
       }
       if(currentStep === 5){
@@ -54,33 +57,52 @@ $(document).ready(function(){
       glazing.push($(this).val());
     });
 
-    var price = area * 0.02; // base price per sq mm
-    if(frame === 'wood') price *= 1.2;
-    if(frame === 'pvc') price *= 1.1;
-    if(glazing.indexOf('double') !== -1) price += area * 0.01;
-    if(glazing.indexOf('tinted') !== -1) price += area * 0.005;
-    if(glazing.indexOf('low-e') !== -1) price += area * 0.008;
-
-    var summary = `Type: ${type}<br>Dimensions: ${width}mm x ${height}mm<br>Frame: ${frame}<br>Glazing: ${glazing.join(', ') || 'None'}<br><strong>Estimated Price: $${price.toFixed(2)}</strong>`;
+    var summary = \`Type: \${type}<br>Dimensions: \${width}mm x \${height}mm<br>Frame: \${frame}<br>Glazing: \${glazing.join(', ') || 'None'}\`;
     $('#quote-summary').html(summary);
-    $('#quote-details').val($(this).text());
-    var data = {
-      type: type,
-      width: width,
-      height: height,
-      frame: frame,
-      glazing: glazing,
-      price: price.toFixed(2)
-    };
-    $('#quote-details').val(JSON.stringify(data));
+    $('#quote-details').val(JSON.stringify({ type, width, height, frame, glazing }));
   }
 
   function drawWindow(){
     var width = parseFloat($('#width').val()) || 0;
     var height = parseFloat($('#height').val()) || 0;
-    var svg = `<svg viewBox="0 0 ${width} ${height}"><rect x="0" y="0" width="${width}" height="${height}" fill="rgba(0,150,255,0.1)" stroke="#0096ff"/><text x="${width/2}" y="${height/2}" dominant-baseline="middle" text-anchor="middle" font-size="20" fill="#333">${width} x ${height}</text></svg>`;
+    if(!width || !height){
+      $('#drawing').empty();
+      return;
+    }
+    var svg = \`
+      <svg viewBox="0 0 \${width} \${height}" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="glassGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="rgba(255,255,255,0.5)"/>
+            <stop offset="100%" stop-color="rgba(0,150,255,0.25)"/>
+          </linearGradient>
+          <linearGradient id="frameGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ccc"/>
+            <stop offset="100%" stop-color="#666"/>
+          </linearGradient>
+        </defs>
+        <rect x="0" y="0" width="\${width}" height="\${height}" fill="url(#glassGrad)" stroke="url(#frameGrad)" stroke-width="20"/>
+        <text x="\${width/2}" y="\${height/2}" dominant-baseline="middle" text-anchor="middle" font-size="24" fill="#333">\${width} x \${height}</text>
+        <text x="\${width/2}" y="20" text-anchor="middle" class="label-x">\${width}mm</text>
+        <text x="20" y="\${height/2}" text-anchor="middle" class="label-y">\${height}mm</text>
+      </svg>
+    \`;
+
     $('#drawing').html(svg);
+    $('#drawing svg').hide().fadeIn(300);
   }
 
   $('#width, #height').on('input', drawWindow);
+
+  $('#download-svg').on('click', function() {
+    const svg = $('#drawing').html();
+    const blob = new Blob([svg], {type: 'image/svg+xml'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'window-quote.svg';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
 });
+
