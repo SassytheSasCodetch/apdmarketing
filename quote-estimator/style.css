@@ -1,7 +1,53 @@
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
+  background: #F4F8FB;
+  padding: 20px;
+}
+.form-container {
   max-width: 600px;
-  margin: 20px auto;
+  margin: 0 auto;
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+  padding: 20px;
+  border-radius: 8px;
+}
+#progressbar {
+  display: flex;
+  justify-content: space-between;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  counter-reset: step;
+}
+#progressbar li {
+  flex: 1;
+  text-align: center;
+  position: relative;
+  color: #999;
+  font-size: 14px;
+}
+#progressbar li:before {
+  content: counter(step);
+  counter-increment: step;
+  display: block;
+  width: 24px;
+  height: 24px;
+  margin: 0 auto 8px;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  background: #fff;
+  line-height: 20px;
+  font-size: 14px;
+}
+#progressbar li.active {
+  color: #0096FF;
+}
+#progressbar li.active:before {
+  border-color: #0096FF;
+  background: #0096FF;
+  color: #fff;
 }
 .step {
   display: none;
@@ -9,12 +55,51 @@ body {
 .step.active {
   display: block;
 }
+label {
+  display: block;
+  margin: 10px 0;
+}
+input, select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+input[type="radio"], input[type="checkbox"] {
+  width: auto;
+  accent-color: #0096FF;
+}
 button {
-  margin-top: 10px;
+  background: #0096FF;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin: 15px 5px 0 0;
+}
+button:hover {
+  background: #007de6;
+}
+#visual-preview {
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 10px;
+  margin-top: 20px;
+  border-top: 1px solid #ccc;
+}
+#drawing {
+  background: #f8fafd;
+  padding: 10px;
+  border-radius: 6px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
 }
 #drawing svg {
-  width: 100%;
-  height: auto;
-  margin-top: 10px;
-  border: 1px solid #ccc;
+  max-height: 400px;
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
 }
+
